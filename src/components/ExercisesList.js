@@ -1,9 +1,9 @@
 import React from 'react'
 import Card from './Card'
 
-
+//<> </> === <React.Fragment>
 const ExercisesList = ({exercises}) => (
-    <div>
+    <> 
         {exercises.map((exercise) => {
             return (
                 <Card
@@ -18,7 +18,7 @@ const ExercisesList = ({exercises}) => (
             )
         })}
 
-    </div>
+    </>
 )
 
 

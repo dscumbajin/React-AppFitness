@@ -34,13 +34,13 @@ class Card extends React.Component {
             <div className="card mx-auto Fitness-Card"
                 // Estilos en Linea
                 style={{
-                    backgroundImage: `url(${circlesImagen}), linear-gradient(to right, ${leftColor}, ${rightColor})`
+                    backgroundImage: `url(${circlesImagen}), linear-gradient(to right, ${leftColor || '#55CCF2'}, ${rightColor || '#2F20ED'})`
                 }}
             >
                 <div className="card-body">
                     <div className="row center">
                         <div className="col-6">
-                            <img src={img} className="float-right" />
+                            <img src={img || emptyImagen} className="float-right" />
                         </div>
                         <div className="col-6 Fitness-Card-Info">
                             <h1>{title}</h1>
