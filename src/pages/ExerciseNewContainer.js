@@ -1,37 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Loading from '../components/Loading'
 import FatalError from './500'
 import ExerciseNew from './ExerciseNew'
 
-class ExerciseNewContainer extends React.Component {
 
-    state = {
-        form: {
-            title: '',
-            description: '',
-            img: '',
-            leftColor: '',
-            rightColor: ''
-        },
-        loading: false,
-        error: null
-    }
+const ExerciseNewContainer = ({ history }) => {
+    const [form, setForm] = useState({
+        title: '',
+        description: '',
+        img: '',
+        leftColor: '',
+        rightColor: ''
+    })
 
-    hangleChange = e => {
-        //BABEL
-        this.setState({
-            form: {
-                // Mantener la información anterior si sobrescribir
-                ...this.state.form,
-                [e.target.name]: e.target.value
-            }
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+
+    const  hangleChange = e => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
         })
     }
 
-    hangleSubmit = async e => {
-        this.setState({
-            loading:true
-        })
+    const hangleSubmit = async e => {
+        setLoading(true)
         e.preventDefault()
         try {
             let config = {
@@ -40,44 +34,34 @@ class ExerciseNewContainer extends React.Component {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(this.state.form)
+                body: JSON.stringify(form)
             }
-            let res = await fetch('http://localhost:8000/api/exercises', config)
-            let json = await res.json()
-            this.setState({
-                loading:false
-            })
+            await fetch('http://localhost:8000/api/exercises', config)
+            setLoading(false)
 
             // Redireccion de pagina
-            this.props.history.push('/exercise')
+            history.push('/exercise')
 
         } catch (error) {
 
-            this.setState({
-                loading:false,
-                error
-            })
+            setLoading(false)
+            setError(error)
 
         }
-
-
     }
 
-
-    render() {
-        if(this.state.loading){
-            return <Loading/>
-        }
-        if(this.state.error){
-            return <FatalError/>
-        }
-        return <ExerciseNew
-                form={this.state.form}
-                onChange={this.hangleChange}
-                onSubmit={this.hangleSubmit}
-                />
+    if(loading){
+        return <Loading/>
     }
-
+    if(error){
+        return <FatalError/>
+    }
+    return <ExerciseNew
+            form={form}
+            onChange={hangleChange}
+            onSubmit={hangleSubmit}
+            />
 }
+
 
 export default ExerciseNewContainer
