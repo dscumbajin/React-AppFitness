@@ -5,9 +5,7 @@ import AddButton from '../components/AddButton'
 
 class Exercises extends React.Component{
 
-  constructor(props){
-    super(props)
-    this.state = {
+  state = {
       data: [
         {
         "id": 1,
@@ -35,7 +33,7 @@ class Exercises extends React.Component{
         }
         ]
     }
-  }
+
 
     render(){
         return (
