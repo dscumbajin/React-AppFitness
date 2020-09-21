@@ -1,54 +1,43 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Exercises from './Exercises'
 import Loading from '../components/Loading'
 import FatalError from './500'
 
-class ExercisesContainer extends React.Component{
 
-  state = {
-      data: [],
-      loading: true,
-      error: null
-    }
+const ExercisesContainer = () => {
+    
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
 
-    // Consumo de una API
-    async componentDidMount(){
-        await this.fetchExercises()
-    }
+    useEffect(() => {
 
-    fetchExercises = async() =>{
+        const fetchExercises = async () => {
 
-        try {
-            let res = await fetch('http://localhost:8000/api/exercises')
-        let data = await res.json()
-
-        this.setState({
-            data,
-            loading: false
-        })
-        } catch (error) {
-            this.setState({
-                loading: false,
-                error
-            })
+            try {
+                let res = await fetch('http://localhost:8000/api/exercises')
+                let data = await res.json()
+                setData(data)
+                setLoading(false)
+            } catch (error) {
+                setLoading(false)
+                setError(error)
+            }
         }
-        
+        fetchExercises()
+
+    }, [])
+
+    if (loading) {
+        return <Loading />
     }
-
-    render(){
-
-        if(this.state.loading){
-            return <Loading/>
-        }
-        if(this.state.error){
-            return <FatalError/>
-        }
-        return (
-           <Exercises
-           data={this.state.data}/>
-        )
+    if (error) {
+        return <FatalError />
     }
-
+    return (
+        <Exercises
+            data={data} />
+    )
 
 }
 
